@@ -1,0 +1,4 @@
+Ingresar categorias en una lista.
+Ingresar ubicacion/es en otra.
+    Iterar sobre las combinaciones.
+
