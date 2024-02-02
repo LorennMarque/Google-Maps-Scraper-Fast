@@ -24,6 +24,7 @@ def search_for_category(driver, category, zone):
     # Input search category
     search = f"{category} en {zone}"
     searchbox = driver.find_element(By.ID, 'searchboxinput')
+    searchbox.clear()
     searchbox.send_keys(str(search))
     search_button = driver.find_element(By.ID, 'searchbox-searchbutton')
     search_button.click()
@@ -54,7 +55,7 @@ def get_place_data(driver, place):
     # Extract place data
     scroll_into_view(driver, place)
     place.click()
-    time.sleep(1)
+    time.sleep(1) # Replace the cooldown with some verification proccess
 
     wait_for_elements(driver, By.CSS_SELECTOR, ".DUwDvf.lfPIob")
 
@@ -84,43 +85,43 @@ def save_to_csv(data_list, csv_filename='places_data.csv'):
 
     print(f'Data saved to {csv_filename}')
 
-def main():
+def main(categories=["aeropuertos"], target_locations=["Mendoza"]):
     # Main logic
+    data_list = []
     driver = open_google_maps()
     wait_for_elements(driver, By.CLASS_NAME, 'searchboxinput')
 
-    search_for_category(driver, "aeropuertos", "mendoza")
+    for category, target_location in zip(categories, target_locations):
+        search_for_category(driver, category, target_location)
 
-    wait_for_elements(driver, By.CLASS_NAME, 'hfpxzc')
+        wait_for_elements(driver, By.CLASS_NAME, 'hfpxzc')
 
-    data_list = []
+        discovered_places = 0
+        while True:
+            try:
+                available_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
+                if available_places == discovered_places:
+                    print("Todo descubierto!")
+                    if not scroll_results(driver, available_places):
+                        break
+                else:
+                    print("Falta por descubrir")
+                    discovered_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
 
-    discovered_places = 0
-    while True:
-        try:
-            available_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
-            if available_places == discovered_places:
-                print("Todo descubierto!")
-                if not scroll_results(driver, available_places):
-                    break
-            else:
-                print("Falta por descubrir")
-                discovered_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
+            except TimeoutException:
+                print("Elemento no encontrado dentro del tiempo de espera")
+                break
 
-        except TimeoutException:
-            print("Elemento no encontrado dentro del tiempo de espera")
-            break
+        places = driver.find_elements(By.CLASS_NAME, 'hfpxzc')
 
-    places = driver.find_elements(By.CLASS_NAME, 'hfpxzc')
+        for place in places:
+            place_data = get_place_data(driver, place)
+            data_list.append(place_data)
 
-    for place in places:
-        place_data = get_place_data(driver, place)
-        data_list.append(place_data)
+        print(data_list)
+        save_to_csv(data_list)
 
-    print(data_list)
-    save_to_csv(data_list)
-    # Close the browser after processing
     driver.quit()
 
 if __name__ == "__main__":
-    main()
+    main(categories=["aeropuertos", "aeropuertos"], target_locations=["Mendoza", "San juan"])
