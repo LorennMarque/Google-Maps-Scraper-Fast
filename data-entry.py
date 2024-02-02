@@ -4,6 +4,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium import webdriver
 import time
+import csv
 import re
 
 # Constants
@@ -72,6 +73,17 @@ def get_place_data(driver, place):
 
     return {"Name": place_name, "Website": place_website}
 
+def save_to_csv(data_list, csv_filename='places_data.csv'):
+    with open(csv_filename, mode='w', encoding='utf-8', newline='') as csv_file:
+        fieldnames = ['Name', 'Website']
+        writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+        writer.writeheader()
+        for data in data_list:
+            writer.writerow(data)
+
+    print(f'Data saved to {csv_filename}')
+
 def main():
     # Main logic
     driver = open_google_maps()
@@ -106,7 +118,7 @@ def main():
         data_list.append(place_data)
 
     print(data_list)
-
+    save_to_csv(data_list)
     # Close the browser after processing
     driver.quit()
 
