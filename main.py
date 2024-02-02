@@ -6,126 +6,109 @@ from selenium import webdriver
 import time
 import re
 
-# Open Google Maps and look for specified category & zone
+# Constants
+INVALID_WEBSITE_NAMES = {"negocio.site", "facebook.com", "instagram.com"}
 
-## Category and zone variables.
-category = "aeropuertos"
-zone = "mendoza"
-search = category + " en " + zone
+def open_google_maps():
+    # Open webdriver
+    driver = webdriver.Chrome()
+    driver.get('https://www.google.com/maps')
+    return driver
 
-## Open webdriver
-driver = webdriver.Chrome()
-driver.get('https://www.google.com/maps')
+def wait_for_elements(driver, by, value, timeout=10):
+    elements_present = EC.presence_of_all_elements_located((by, value))
+    WebDriverWait(driver, timeout).until(elements_present)
 
-## Wait until all elements are present
-elements_present = EC.presence_of_all_elements_located((By.CLASS_NAME, "searchboxinput"))
-WebDriverWait(driver, 10).until(elements_present)
+def search_for_category(driver, category, zone):
+    # Input search category
+    search = f"{category} en {zone}"
+    searchbox = driver.find_element(By.ID, 'searchboxinput')
+    searchbox.send_keys(str(search))
+    search_button = driver.find_element(By.ID, 'searchbox-searchbutton')
+    search_button.click()
 
-## Input Search our category.
-searchbox = driver.find_element(By.ID, 'searchboxinput')
-searchbox.send_keys(str(search))
+def scroll_into_view(driver, element):
+    driver.execute_script("arguments[0].scrollIntoView(true);", element)
 
-search_button = driver.find_element(By.ID, 'searchbox-searchbutton')
-search_button.click()
-
-## Wait until all elements are present.
-results_present = EC.presence_of_all_elements_located((By.CLASS_NAME, "hfpxzc"))
-WebDriverWait(driver, 10).until(results_present)
-
-# Variable to store results.
-data_list = []
-
-def scroll(current_amount_results, timeout = 5):
-    # Esperar a que el elemento este presente..
-    elemento = WebDriverWait(driver, 5).until( # Variable de timeout
-    EC.presence_of_element_located((By.CSS_SELECTOR, '.qjESne.veYFef'))
+def scroll_results(driver, current_amount_results, timeout=5):
+    elemento = WebDriverWait(driver, 5).until(
+        EC.presence_of_element_located((By.CSS_SELECTOR, '.qjESne.veYFef'))
     )
-
-    # Scroll element into view
+    
     driver.execute_script("arguments[0].scrollIntoView(true);", elemento)
 
     n = 0
     while n <= timeout:
-        try: 
-            if current_amount_results ==  len(driver.find_elements(By.CLASS_NAME, 'hfpxzc')):
-                n +=1
+        try:
+            if current_amount_results == len(driver.find_elements(By.CLASS_NAME, 'hfpxzc')):
+                n += 1
                 print("Recargando resultados 🔥")
                 time.sleep(1)
             else:
                 return True
         except:
             return False
-    
 
-discovered_places = 0
-while True:
-    try:   
-        avaiable_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
-        if avaiable_places == discovered_places:
-            print("Todo descubierto!")
-            if not scroll(avaiable_places):
-                break
-        else:
-            print("Falta por descubrir")
-            discovered_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
-
-    except TimeoutException:
-        print("Elemento no encontrado dentro del tiempo de espera")
-        break 
-
-places = driver.find_elements(By.CLASS_NAME, 'hfpxzc')
-
-print(f"{len(places)} encontrados.")
-
-for place in places:
-    # Click on the result
-    driver.execute_script("arguments[0].scrollIntoView(true);", place)
-
+def get_place_data(driver, place):
+    # Extract place data
+    scroll_into_view(driver, place)
     place.click()
     time.sleep(1)
 
+    wait_for_elements(driver, By.CSS_SELECTOR, ".DUwDvf.lfPIob")
 
-    # Wait till result data loads
-    elements_present = EC.presence_of_all_elements_located((By.CSS_SELECTOR, ".DUwDvf.lfPIob"))
-    WebDriverWait(driver, 10).until(elements_present)
-
-    # Sanitize the input
     place_name = re.sub(r"['\"&]", "", driver.find_element(By.CSS_SELECTOR, ".DUwDvf.lfPIob").text)
 
     try:
         place_website_element = driver.find_element(By.CSS_SELECTOR, '.rogA2c.ITvuef .Io6YTe')
-        
-        invalid_website_names = {"negocio.site", "facebook.com", "instagram.com"}
-        
-        if place_website_element.text not in invalid_website_names:
+
+        if place_website_element.text not in INVALID_WEBSITE_NAMES:
             place_website = place_website_element.text
         else:
             place_website = 0
 
     except:
         place_website = 0
-        data_list.append({"Name": place_name, "Website": place_website})
 
-print(data_list)
+    return {"Name": place_name, "Website": place_website}
 
+def main():
+    # Main logic
+    driver = open_google_maps()
+    wait_for_elements(driver, By.CLASS_NAME, 'searchboxinput')
 
-# # Get the atributes
-# print("Aria Label:",  places[0].get_attribute("aria-label"))
-# print("Tag name:", places[0].tag_name)
-# print("Text content:", places[0].text)
-# print("Attributes:", places[0].get_attribute("outerHTML"))
-# print("Location:", places[0].location)
-# print("Size:", places[0].size)
-    
-#         current_page_html = driver.page_source
-#         soup = BeautifulSoup(current_page_html, 'html.parser')
+    search_for_category(driver, "aeropuertos", "mendoza")
 
-#         data = {
-#         }
+    wait_for_elements(driver, By.CLASS_NAME, 'hfpxzc')
 
-#         while True:
-#             title_name = soup.select('.DUwDvf.lfPIob')
-#             data["Name"] = title_name[0].text
-#             print(data["Name"])
+    data_list = []
 
-# Pasar al siguiente resultado.
+    discovered_places = 0
+    while True:
+        try:
+            available_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
+            if available_places == discovered_places:
+                print("Todo descubierto!")
+                if not scroll_results(driver, available_places):
+                    break
+            else:
+                print("Falta por descubrir")
+                discovered_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
+
+        except TimeoutException:
+            print("Elemento no encontrado dentro del tiempo de espera")
+            break
+
+    places = driver.find_elements(By.CLASS_NAME, 'hfpxzc')
+
+    for place in places:
+        place_data = get_place_data(driver, place)
+        data_list.append(place_data)
+
+    print(data_list)
+
+    # Close the browser after processing
+    driver.quit()
+
+if __name__ == "__main__":
+    main()
