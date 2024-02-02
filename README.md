@@ -5,7 +5,6 @@ Google Maps Leads Scraper: A simple and efficient web scraper for extracting lea
 ## To do
 
 - Turn "INVALID_WEBSITE_NAMES" constant into a field in config.json
-- Replace the cooldown of 1sec with an actual validation of the loaded content in get_place_data at data-entry.php
 
 ## Ideas
 
