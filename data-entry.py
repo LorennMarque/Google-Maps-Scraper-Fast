@@ -39,24 +39,25 @@ def search_for_category(driver, category, zone):
 def scroll_into_view(driver, element):
     driver.execute_script("arguments[0].scrollIntoView(true);", element)
 
-def scroll_results(driver, current_amount_results, timeout=5):
-    elemento = WebDriverWait(driver, 5).until(
-        EC.presence_of_element_located((By.CSS_SELECTOR, '.qjESne.veYFef'))
-    )
-    
-    driver.execute_script("arguments[0].scrollIntoView(true);", elemento)
+def scroll_results(driver, current_amount_results, timeout=1):
+    try:
+        elemento = driver.find_element((By.CSS_SELECTOR, '.qjESne.veYFef'))
+        driver.execute_script("arguments[0].scrollIntoView(true);", elemento)
 
-    n = 0
-    while n <= timeout:
-        try:
-            if current_amount_results == len(driver.find_elements(By.CLASS_NAME, 'hfpxzc')):
-                n += 1
-                print("Recargando resultados 🔥")
-                time.sleep(1)
-            else:
-                return True
-        except:
-            return False
+        n = 0
+        while n <= timeout:
+            try:
+                if current_amount_results == len(driver.find_elements(By.CLASS_NAME, 'hfpxzc')):
+                    n += 1
+                    print("Recargando resultados 🔥")
+                    time.sleep(1)
+                else:
+                    return True
+            except:
+                return False
+    except:
+        return False
+
 
 def get_place_data(driver, place, previous_url):
     # Extract place data
@@ -129,7 +130,8 @@ def main():
                 available_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
                 if available_places == discovered_places:
                     print("Todo descubierto!")
-                    if not scroll_results(driver, available_places):
+                    print(scroll_results(driver, available_places))
+                    if scroll_results(driver, available_places) == False:
                         break
                 else:
                     print("Falta por descubrir")

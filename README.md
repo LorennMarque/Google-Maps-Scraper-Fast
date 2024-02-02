@@ -10,4 +10,3 @@ Google Maps Leads Scraper: A simple and efficient web scraper for extracting lea
 
 - Make an "Permutations" parameter at config.json to swap all categories with all target location
 - Async processing to reduce load time.
-- Optimize / Replace TimeoutException in main() at data-entry.php
