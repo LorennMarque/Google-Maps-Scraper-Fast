@@ -2,6 +2,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
+from selenium.common.exceptions import NoSuchElementException
 from selenium import webdriver
 import time
 import json
@@ -57,15 +58,31 @@ def scroll_results(driver, current_amount_results, timeout=5):
         except:
             return False
 
-def get_place_data(driver, place):
+def get_place_data(driver, place, previous_url):
     # Extract place data
     scroll_into_view(driver, place)
     place.click()
-    time.sleep(1) # Replace the cooldown with some verification proccess
 
-    wait_for_elements(driver, By.CSS_SELECTOR, ".DUwDvf.lfPIob")
+    while previous_url ==  driver.current_url:
+        time.sleep(0.5) 
 
     place_name = re.sub(r"['\"&]", "", driver.find_element(By.CSS_SELECTOR, ".DUwDvf.lfPIob").text)
+
+    try:
+        place_review_score = float(re.sub(r"[,]", ".",driver.find_element(By.CSS_SELECTOR, 'div.F7nice span[aria-hidden="true"]').text))
+        place_review_amount = int(re.sub(r"[(\")]", "", driver.find_element(By.CSS_SELECTOR, 'div.F7nice span:nth-child(2) span[aria-label]').text))
+
+    except NoSuchElementException:
+        # Handle the case when either score or amount element is not found
+        place_review_score = 0
+        place_review_amount = 0
+
+    try:
+        place_phone_number = driver.find_element(By.CSS_SELECTOR, '[data-item-id^="phone"]').text
+
+    except NoSuchElementException:
+        # Handle the case when either score or amount element is not found
+        place_phone_number = 0
 
     try:
         place_website_element = driver.find_element(By.CSS_SELECTOR, '.rogA2c.ITvuef .Io6YTe')
@@ -78,11 +95,11 @@ def get_place_data(driver, place):
     except:
         place_website = 0
 
-    return {"Name": place_name, "Website": place_website}
+    return {"Name": place_name, "Website": place_website , "Reviews_Score": place_review_score , "Reviews_Amount": place_review_amount, 'Phone number': place_phone_number, 'GoogleMaps Link': driver.current_url}
 
 def save_to_csv(data_list, csv_filename='places_data.csv'):
     with open(csv_filename, mode='w', encoding='utf-8', newline='') as csv_file:
-        fieldnames = ['Name', 'Website']
+        fieldnames = ['Name', 'Website', 'Reviews_Score', 'Reviews_Amount', 'Phone number', 'GoogleMaps Link']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
         writer.writeheader()
@@ -125,7 +142,7 @@ def main():
         places = driver.find_elements(By.CLASS_NAME, 'hfpxzc')
 
         for place in places:
-            place_data = get_place_data(driver, place)
+            place_data = get_place_data(driver, place, driver.current_url)
             data_list.append(place_data)
 
         print(data_list)
