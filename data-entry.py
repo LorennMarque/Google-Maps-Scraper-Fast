@@ -4,11 +4,17 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import TimeoutException
 from selenium import webdriver
 import time
+import json
 import csv
 import re
 
 # Constants
-INVALID_WEBSITE_NAMES = {"negocio.site", "facebook.com", "instagram.com"}
+INVALID_WEBSITE_NAMES = {"negocio.site", "facebook.com", "instagram.com"} # Put this into monkey-friendly json file. Somehow.
+
+def load_config(config_file='config.json'):
+    with open(config_file, 'r') as file:
+        config = json.load(file)
+    return config
 
 def open_google_maps():
     # Open webdriver
@@ -85,16 +91,20 @@ def save_to_csv(data_list, csv_filename='places_data.csv'):
 
     print(f'Data saved to {csv_filename}')
 
-def main(categories=["aeropuertos"], target_locations=["Mendoza"]):
-    # Main logic
+def main():
+    # Load configurations from JSON file
+    config = load_config()
     data_list = []
+
+    # Main logic
     driver = open_google_maps()
     wait_for_elements(driver, By.CLASS_NAME, 'searchboxinput')
 
-    for category, target_location in zip(categories, target_locations):
-        search_for_category(driver, category, target_location)
+    for category, location in zip(config['categories'], config['target_locations']):
+        search_for_category(driver, category, location)
 
         wait_for_elements(driver, By.CLASS_NAME, 'hfpxzc')
+
 
         discovered_places = 0
         while True:
@@ -108,7 +118,7 @@ def main(categories=["aeropuertos"], target_locations=["Mendoza"]):
                     print("Falta por descubrir")
                     discovered_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
 
-            except TimeoutException:
+            except TimeoutException: # Make this more time efficient
                 print("Elemento no encontrado dentro del tiempo de espera")
                 break
 
@@ -119,9 +129,12 @@ def main(categories=["aeropuertos"], target_locations=["Mendoza"]):
             data_list.append(place_data)
 
         print(data_list)
-        save_to_csv(data_list)
 
+        # Save data to CSV
+        save_to_csv(data_list, config['csv_filename'])
+
+    # Close the browser after processing
     driver.quit()
 
 if __name__ == "__main__":
-    main(categories=["aeropuertos", "aeropuertos"], target_locations=["Mendoza", "San juan"])
+    main()
