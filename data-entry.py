@@ -62,7 +62,6 @@ def scroll_results(driver, current_amount_results, waittime=5):
     except:
         return False
 
-
 def get_place_data(driver, place, previous_url, previous_name):
     # Extract place data
     scroll_into_view(driver, place)
