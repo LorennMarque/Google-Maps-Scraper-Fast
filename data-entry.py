@@ -68,12 +68,28 @@ def get_place_data(driver, place, previous_url, previous_name):
     scroll_into_view(driver, place)
     place.click()
 
-    wait_for_elements(driver, By.CSS_SELECTOR, ".DUwDvf.lfPIob", 20)
-    place_name = re.sub(r"['\"&]", "", driver.find_element(By.CSS_SELECTOR, ".DUwDvf.lfPIob").text)
+    try:
+        wait_for_elements(driver, By.CSS_SELECTOR, ".DUwDvf.lfPIob")
+        place_name = re.sub(r"['\"&]", "", driver.find_element(By.CSS_SELECTOR, ".DUwDvf.lfPIob").text)
+    except:
+        place.click()
+        wait_for_elements(driver, By.CSS_SELECTOR, ".DUwDvf.lfPIob")
+        place_name = re.sub(r"['\"&]", "", driver.find_element(By.CSS_SELECTOR, ".DUwDvf.lfPIob").text)
 
     while not((previous_url ==  driver.current_url) == False and (previous_name == place_name) == False) :
+        place.click()
         time.sleep(0.5)
-        place_name = re.sub(r"['\"&]", "", driver.find_element(By.CSS_SELECTOR, ".DUwDvf.lfPIob").text)
+        wait_for_elements(driver, By.CSS_SELECTOR, ".DUwDvf.lfPIob")
+
+        found = True
+        while found:
+            try:
+                place_name = re.sub(r"['\"&]", "", driver.find_element(By.CSS_SELECTOR, ".DUwDvf.lfPIob").text)
+                found = False
+            except:
+                place.click()
+                time.sleep(0.5)
+
 
     try:
         place_review_score = re.sub(r"[,]", ".",driver.find_element(By.CSS_SELECTOR, 'div.F7nice span[aria-hidden="true"]').text)
@@ -125,9 +141,9 @@ def main():
     wait_for_elements(driver, By.CLASS_NAME, 'searchboxinput')
 
     last_place = ""
-    contador = 0
-
+    last_url = ""
     for category, location in zip(config['categories'], config['target_locations']):
+        print(f"Searching for {category} in {location}")
         search_for_category(driver, category, location)
 
         wait_for_elements(driver, By.CLASS_NAME, 'hfpxzc')
@@ -150,17 +166,14 @@ def main():
         places = driver.find_elements(By.CLASS_NAME, 'hfpxzc')
 
         for place in places:
-            contador =+ 1
-            print(contador)
-            print(f"NEW PLACE => {place}")
-            print(f"CURRENT URL => {driver.current_url}")
-            print(f"LAST PLACE => {last_place}")
-            place_data = get_place_data(driver, place, driver.current_url, last_place )
+            place_data = get_place_data(driver, place, last_url, last_place )
             last_place = place_data['Name']
             data_list.append(place_data)
+            print(f"✅ Stored {place_data['Name']}")
+            last_url = driver.current_url
 
-        # Save data to CSV
-        save_to_csv(data_list, config['csv_filename'])
+    # Save data to CSV
+    save_to_csv(data_list, config['csv_filename'])
 
     # Close the browser after processing
     driver.quit()
