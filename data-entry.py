@@ -23,9 +23,9 @@ def open_google_maps():
     driver.get('https://www.google.com/maps')
     return driver
 
-def wait_for_elements(driver, by, value, timeout=10):
+def wait_for_elements(driver, by, value, waittime=10):
     elements_present = EC.presence_of_all_elements_located((by, value))
-    WebDriverWait(driver, timeout).until(elements_present)
+    WebDriverWait(driver, 10).until(elements_present)
 
 def search_for_category(driver, category, zone):
     # Input search category
@@ -39,41 +39,47 @@ def search_for_category(driver, category, zone):
 def scroll_into_view(driver, element):
     driver.execute_script("arguments[0].scrollIntoView(true);", element)
 
-def scroll_results(driver, current_amount_results, timeout=1):
+def scroll_results(driver, current_amount_results, waittime=5):
     try:
-        elemento = driver.find_element((By.CSS_SELECTOR, '.qjESne.veYFef'))
+        wait_for_elements(driver, By.CSS_SELECTOR, '.qjESne.veYFef')
+        elemento = driver.find_element(By.CSS_SELECTOR, '.qjESne.veYFef')
+
         driver.execute_script("arguments[0].scrollIntoView(true);", elemento)
 
-        n = 0
-        while n <= timeout:
+        times_left = 0
+        while times_left < waittime:
             try:
-                if current_amount_results == len(driver.find_elements(By.CLASS_NAME, 'hfpxzc')):
-                    n += 1
-                    print("Recargando resultados 🔥")
+                wait_for_elements(driver, By.CSS_SELECTOR, '.hfpxzc')
+                if int(current_amount_results) == int(len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))):
+                    times_left += 1
                     time.sleep(1)
                 else:
                     return True
             except:
                 return False
+
+        return False
     except:
         return False
 
 
-def get_place_data(driver, place, previous_url):
+def get_place_data(driver, place, previous_url, previous_name):
     # Extract place data
     scroll_into_view(driver, place)
     place.click()
 
-    while previous_url ==  driver.current_url:
-        time.sleep(0.5) 
-
+    wait_for_elements(driver, By.CSS_SELECTOR, ".DUwDvf.lfPIob", 20)
     place_name = re.sub(r"['\"&]", "", driver.find_element(By.CSS_SELECTOR, ".DUwDvf.lfPIob").text)
 
-    try:
-        place_review_score = float(re.sub(r"[,]", ".",driver.find_element(By.CSS_SELECTOR, 'div.F7nice span[aria-hidden="true"]').text))
-        place_review_amount = int(re.sub(r"[(\")]", "", driver.find_element(By.CSS_SELECTOR, 'div.F7nice span:nth-child(2) span[aria-label]').text))
+    while not((previous_url ==  driver.current_url) == False and (previous_name == place_name) == False) :
+        time.sleep(0.5)
+        place_name = re.sub(r"['\"&]", "", driver.find_element(By.CSS_SELECTOR, ".DUwDvf.lfPIob").text)
 
-    except NoSuchElementException:
+    try:
+        place_review_score = re.sub(r"[,]", ".",driver.find_element(By.CSS_SELECTOR, 'div.F7nice span[aria-hidden="true"]').text)
+        place_review_amount = int(re.sub(r"[(\")\".]", "", driver.find_element(By.CSS_SELECTOR, 'div.F7nice span:nth-child(2) span[aria-label]').text))
+
+    except:
         # Handle the case when either score or amount element is not found
         place_review_score = 0
         place_review_amount = 0
@@ -81,7 +87,7 @@ def get_place_data(driver, place, previous_url):
     try:
         place_phone_number = driver.find_element(By.CSS_SELECTOR, '[data-item-id^="phone"]').text
 
-    except NoSuchElementException:
+    except:
         # Handle the case when either score or amount element is not found
         place_phone_number = 0
 
@@ -118,6 +124,9 @@ def main():
     driver = open_google_maps()
     wait_for_elements(driver, By.CLASS_NAME, 'searchboxinput')
 
+    last_place = ""
+    contador = 0
+
     for category, location in zip(config['categories'], config['target_locations']):
         search_for_category(driver, category, location)
 
@@ -129,12 +138,9 @@ def main():
             try:
                 available_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
                 if available_places == discovered_places:
-                    print("Todo descubierto!")
-                    print(scroll_results(driver, available_places))
                     if scroll_results(driver, available_places) == False:
                         break
                 else:
-                    print("Falta por descubrir")
                     discovered_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
 
             except TimeoutException: # Make this more time efficient
@@ -144,10 +150,14 @@ def main():
         places = driver.find_elements(By.CLASS_NAME, 'hfpxzc')
 
         for place in places:
-            place_data = get_place_data(driver, place, driver.current_url)
+            contador =+ 1
+            print(contador)
+            print(f"NEW PLACE => {place}")
+            print(f"CURRENT URL => {driver.current_url}")
+            print(f"LAST PLACE => {last_place}")
+            place_data = get_place_data(driver, place, driver.current_url, last_place )
+            last_place = place_data['Name']
             data_list.append(place_data)
-
-        print(data_list)
 
         # Save data to CSV
         save_to_csv(data_list, config['csv_filename'])
