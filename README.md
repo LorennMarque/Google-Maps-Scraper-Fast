@@ -6,9 +6,11 @@ Google Maps Leads Scraper: A simple and efficient web scraper for extracting lea
 
 - Turn "INVALID_WEBSITE_NAMES" constant into a field in config.json
 - Headless scraping.
+- Optimize CSV storage, consider storing every single validated result.
 
 ## Ideas
 
 - Make an "Permutations" parameter at config.json to swap all categories with all target location
 - Async processing to reduce load time.
 - Save gmaps result position.
+- Loading animation
