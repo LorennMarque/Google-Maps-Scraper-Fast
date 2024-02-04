@@ -39,9 +39,9 @@ This script utilizes Selenium to extract data from commercial places on the web.
 
 Once you have configured the config.json file, execute the following command to start the script:
 
-    ```bash
-    python data-entry.py
-    ```
+```bash
+python data-entry.py
+```
 
 Monitor the console to see how the script is working. Note that obtaining results may take up to 10 seconds to be stored.
 
