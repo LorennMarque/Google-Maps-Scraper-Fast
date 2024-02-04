@@ -4,7 +4,7 @@ This script utilizes Selenium to extract data from commercial places on the web.
 
 You can set multiple target categories in different locations so the script can scrap +200 rows at ease.
 
-## Information scraped:
+Information scraped:
 
 - Name
 - Website URL
