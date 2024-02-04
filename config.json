@@ -1,5 +1,5 @@
 {
-  "categories": ["aeropuertos", "restaurantes"],
-  "target_locations": ["mendoza", "san juan"],
+  "categories": ["restaurantes"],
+  "target_locations": ["san juan"],
   "csv_filename": "places_data.csv"
 }
