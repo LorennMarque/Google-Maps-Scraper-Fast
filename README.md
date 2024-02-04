@@ -1,8 +1,4 @@
-# Google Maps Leads / info Scrapper
-
-Google Maps Leads Scraper: A simple and efficient web scraper for extracting leads from Google Maps. Easily customizable, plug-and-go solution that automatically organizes extracted data into a spreadsheet. Streamline your lead generation process with this user-friendly tool.
-
-# Web Scraper for Place Data
+# Google Maps Web Scraper for Place Data
 
 This script utilizes Selenium to extract data from commercial places on the web. Make sure to follow the steps below to set up and run the script.
 
