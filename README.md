@@ -39,7 +39,7 @@ This script utilizes Selenium to extract data from commercial places on the web.
 
 Once you have configured the config.json file, execute the following command to start the script:
 
-```bash
+```
 python data-entry.py
 ```
 
@@ -59,7 +59,3 @@ That's it! You should now have a CSV file with the extracted data from the place
 - Async processing to reduce load time.
 - Save gmaps result position.
 - Loading animation
-
-```
-
-```
