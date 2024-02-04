@@ -2,6 +2,17 @@
 
 This script utilizes Selenium to extract data from commercial places on the web. Make sure to follow the steps below to set up and run the script.
 
+You can set multiple target categories in different locations so the script can scrap +200 rows at ease.
+
+## Information scraped:
+
+- Name
+- Website URL
+- Reviews Score
+- Reviews Amount
+- Phone number
+- GoogleMaps URL
+
 ## Installation of Requirements
 
 1. Clone this repository to your local machine:
