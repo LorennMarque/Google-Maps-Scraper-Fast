@@ -68,7 +68,7 @@ def scroll_results(driver, current_amount_results, waittime=10):
     except:
         return False
 
-def get_place_data(driver, place, previous_url, previous_name):
+def get_place_data(driver, place, previous_url, previous_name, category, location):
     # Extract place data
     scroll_into_view(driver, place)
     place.click()
@@ -123,11 +123,12 @@ def get_place_data(driver, place, previous_url, previous_name):
     except:
         place_website = ""
 
-    return {"Name": place_name, "Website": place_website , "Reviews_Score": place_review_score , "Reviews_Amount": place_review_amount, 'Phone number': place_phone_number, 'GoogleMaps Link': driver.current_url}
+    return {"Name": place_name, "Website": place_website , "Reviews_Score": place_review_score , "Reviews_Amount": place_review_amount, 'Phone number': place_phone_number, 'GoogleMaps Link': driver.current_url,"Category": category,
+    'Zone': location}
 
 def save_to_csv(data_list, csv_filename='places_data.csv'):
     with open(csv_filename, mode='w', encoding='utf-8', newline='') as csv_file:
-        fieldnames = ['Name', 'Website', 'Reviews_Score', 'Reviews_Amount', 'Phone number', 'GoogleMaps Link']
+        fieldnames = ['Name', 'Website', 'Reviews_Score', 'Reviews_Amount', 'Phone number', 'Category', 'Zone']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
         writer.writeheader()
@@ -150,7 +151,6 @@ def main():
     count = 0
     for category, location in zip(config['categories'], config['target_locations']):
         search_for_category(driver, category, location)
-
         wait_for_elements(driver, By.CLASS_NAME, 'hfpxzc')
 
 
@@ -171,11 +171,11 @@ def main():
         places = driver.find_elements(By.CLASS_NAME, 'hfpxzc')
 
         for place in places:
-            place_data = get_place_data(driver, place, last_url, last_place )
+            place_data = get_place_data(driver, place, last_url, last_place, category, location)
             last_place = place_data['Name']
             data_list.append(place_data)
-            count =+ 1 
-            print(f"✅ Nro{count} Stored {place_data['Name']}")
+            count = count +  1 
+            print(f"✅ Nro {count} Stored {place_data['Name']}")
             last_url = driver.current_url
 
     # Save data to CSV

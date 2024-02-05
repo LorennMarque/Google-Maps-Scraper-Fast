@@ -1,5 +1,5 @@
 {
-  "categories": ["restaurantes"],
-  "target_locations": ["san juan"],
+  "categories": ["restaurantes", "control de plagas", "dentista"],
+  "target_locations": ["san juan", "san juan", "san juan"],
   "csv_filename": "places_data.csv"
 }
