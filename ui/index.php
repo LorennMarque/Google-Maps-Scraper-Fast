@@ -64,7 +64,7 @@
                     <td>' . htmlspecialchars($website) . '</td>
                     <td>' . htmlspecialchars($reviewsScore) . '</td>
                     <td>' . htmlspecialchars($reviewsAmount) . '</td>
-                    <td><a target="__blank" href="https://wa.me/+54' . htmlspecialchars($phoneNumber) . '">' . htmlspecialchars($phoneNumber) . '</a></td>
+                    <td><a target="__blank" href="https://api.whatsapp.com/send/?phone=%2B54' . htmlspecialchars($phoneNumber) . '&text=%F0%9F%91%8B%20Hola!%20Muy%20buenas,%20soy%20Lorenzo.%20Hablo%20con%20' . htmlspecialchars($name) . ',%20cierto?&type=phone_number&app_absent=0">' . htmlspecialchars($phoneNumber) . '</a></td>
                   </tr>';
           }
 
