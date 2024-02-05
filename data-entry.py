@@ -128,7 +128,7 @@ def get_place_data(driver, place, previous_url, previous_name, category, locatio
 
 def save_to_csv(data_list, csv_filename='places_data.csv'):
     with open(csv_filename, mode='w', encoding='utf-8', newline='') as csv_file:
-        fieldnames = ['Name', 'Website', 'Reviews_Score', 'Reviews_Amount', 'Phone number', 'Category', 'Zone']
+        fieldnames = ['Name', 'Website', 'Reviews_Score', 'Reviews_Amount', 'Phone number','GoogleMaps Link', 'Category', 'Zone']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
         writer.writeheader()
