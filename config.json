@@ -1,5 +1,10 @@
 {
-  "categories": ["restaurantes", "control de plagas", "dentista"],
-  "target_locations": ["san juan", "san juan", "san juan"],
+  "categories": [
+    "Empresa de fumigación y control de plagas",
+    "Abogado",
+    "Concesionario de automóviles",
+    "Quiropráctico"
+  ],
+  "target_locations": ["san luis", "san luis", "san luis", "san luis"],
   "csv_filename": "places_data.csv"
 }
