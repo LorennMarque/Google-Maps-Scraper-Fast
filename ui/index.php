@@ -64,7 +64,7 @@
                     <td>' . htmlspecialchars($website) . '</td>
                     <td>' . htmlspecialchars($reviewsScore) . '</td>
                     <td>' . htmlspecialchars($reviewsAmount) . '</td>
-                    <td><a target="__blank" href="https://api.whatsapp.com/send/?phone=%2B54' . htmlspecialchars($phoneNumber) . '&text=%F0%9F%91%8B%20Hola!%20Muy%20buenas,%20soy%20Lorenzo.%20Hablo%20con%20' . htmlspecialchars($name) . ',%20cierto?&type=phone_number&app_absent=0">' . htmlspecialchars($phoneNumber) . '</a></td>
+                    <td><a target="__blank" href="https://api.whatsapp.com/send/?phone=%2B54' . htmlspecialchars($phoneNumber) . '&text=Hola ' . htmlspecialchars($name) . '! Soy Lorenzo marquesini, estudiante de ciencias de datos en la universidad austral. Pensé en contactarlos porque tengo una propuesta para mejorar la presencia de su marca en internet. Si les interesa puedo enviarles un audio corto dándoles toda la información, requisitos y costo. Muchas gracias!&type=phone_number&app_absent=0">' . htmlspecialchars($phoneNumber) . '</a></td>
                   </tr>';
           }
 
