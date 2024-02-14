@@ -123,12 +123,12 @@ def get_place_data(driver, place, previous_url, previous_name, category, locatio
     except:
         place_website = ""
 
-    return {"Name": place_name, "Website": place_website , "Reviews_Score": place_review_score , "Reviews_Amount": place_review_amount, 'Phone number': place_phone_number, 'GoogleMaps Link': driver.current_url,"Category": category,
-    'Zone': location}
+    return {"name": place_name, "website": place_website , "reviews_score": place_review_score , "reviews_amount": place_review_amount, 'phone': place_phone_number, 'googlemaps_link': driver.current_url,"category": category,
+    'zone': location}
 
 def save_to_csv(data_list, csv_filename='places_data.csv'):
     with open(csv_filename, mode='w', encoding='utf-8', newline='') as csv_file:
-        fieldnames = ['Name', 'Website', 'Reviews_Score', 'Reviews_Amount', 'Phone number','GoogleMaps Link', 'Category', 'Zone']
+        fieldnames = ['name', 'website', 'reviews_score', 'reviews_amount', 'phone','googlemaps_link', 'category', 'zone']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
         writer.writeheader()
@@ -172,10 +172,10 @@ def main():
 
         for place in places:
             place_data = get_place_data(driver, place, last_url, last_place, category, location)
-            last_place = place_data['Name']
+            last_place = place_data['name']
             data_list.append(place_data)
             count = count +  1 
-            print(f"✅ Nro {count} Stored {place_data['Name']}")
+            print(f"✅ Nro {count} Stored {place_data['name']}")
             last_url = driver.current_url
 
     # Save data to CSV
