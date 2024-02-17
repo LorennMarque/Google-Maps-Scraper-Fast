@@ -13,7 +13,7 @@ import re
 INVALID_WEBSITE_NAMES = {"negocio.site", "facebook.com", "instagram.com"} # Put this into monkey-friendly json file. Somehow.
 
 def load_config(config_file='config.json'):
-    with open(config_file, 'r') as file:
+    with open(config_file, 'r', encoding="utf-8") as file:
         config = json.load(file)
     return config
 

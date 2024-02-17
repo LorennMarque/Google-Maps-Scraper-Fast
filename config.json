@@ -1,10 +1,5 @@
 {
-  "categories": [
-    "Empresa de fumigación y control de plagas",
-    "Abogado",
-    "Concesionario de automóviles",
-    "Quiropráctico"
-  ],
-  "target_locations": ["san luis", "san luis", "san luis", "san luis"],
+  "categories": ["Empresa de fumigación y control de plagas"],
+  "target_locations": ["san luis"],
   "csv_filename": "places_data.csv"
 }
