@@ -53,16 +53,3 @@ python data-entry.py
 Monitor the console to see how the script is working. Note that obtaining results may take up to 10 seconds to be stored.
 
 That's it! You should now have a CSV file with the extracted data from the places you specified in the configuration file.
-
-## To do
-
-- Turn "INVALID_WEBSITE_NAMES" constant into a field in config.json
-- Headless scraping.
-- Optimize CSV storage, consider storing every single validated result.
-
-## Ideas
-
-- Make an "Permutations" parameter at config.json to swap all categories with all target location
-- Async processing to reduce load time.
-- Save gmaps result position.
-- Loading animation
