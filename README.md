@@ -1,4 +1,4 @@
-# Google Maps Web Scraper for Place Data
+# Google Maps Locations Scraper
 
 This script utilizes Selenium to extract data from commercial places on the web. Make sure to follow the steps below to set up and run the script.
 
