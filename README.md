@@ -1,8 +1,6 @@
 # Google Maps Locations Scraper
 
-This script utilizes Selenium to extract data from commercial places on the web. Make sure to follow the steps below to set up and run the script.
-
-You can set multiple target categories in different locations so the script can scrap +200 rows at ease.
+This script utilizes Selenium to extract data from commercial places on the web. It allows you to specify multiple categories and corresponding locations in a JSON file, enabling the script to iteratively scrape data from each category-location pair.
 
 Information scraped:
 
