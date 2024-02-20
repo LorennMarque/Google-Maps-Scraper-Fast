@@ -183,7 +183,7 @@ def main():
             last_place = place_data['name']
             data_list.append(place_data)
             count = count +  1 
-            print(f"📩 Nro {count} Stored {place_data['name']}")
+            print(f"📩 {count} | Stored {place_data['name']}")
             last_url = driver.current_url
 
     # Close the browser after processing
