@@ -21,6 +21,7 @@ def open_google_maps():
     # Open webdriver
     chrome_options = Options()
     chrome_options.add_argument("--headless=new") # for Chrome >= 109
+    chrome_options.add_argument("--window-size=1920,1080")
     driver = webdriver.Chrome(options=chrome_options)
     driver.get('https://www.google.com/maps')
     print("⭐ Webdriver started")
@@ -123,19 +124,26 @@ def get_place_data(driver, place, previous_url, previous_name, category, locatio
     except:
         place_website = ""
 
-    return {"name": place_name, "website": place_website , "reviews_score": place_review_score , "reviews_amount": place_review_amount, 'phone': place_phone_number, 'googlemaps_link': driver.current_url,"category": category,
+    data = {"name": place_name, "website": place_website , "reviews_score": place_review_score , "reviews_amount": place_review_amount, 'phone': place_phone_number, 'googlemaps_link': driver.current_url,"category": category,
     'zone': location}
 
+    # Save data to CSV
+    save_to_csv([data])
+
+    return data
+
 def save_to_csv(data_list, csv_filename='places_data.csv'):
-    with open(csv_filename, mode='w', encoding='utf-8', newline='') as csv_file:
+    with open(csv_filename, mode='a', encoding='utf-8', newline='') as csv_file:  # Changed 'w' to 'a' for append mode
         fieldnames = ['name', 'website', 'reviews_score', 'reviews_amount', 'phone','googlemaps_link', 'category', 'zone']
         writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
-        writer.writeheader()
+        # Check if the file is empty, if so, write the header
+        csv_file.seek(0, 2)  # Move to the end of file
+        if csv_file.tell() == 0:  # Check file position
+            writer.writeheader()
+
         for data in data_list:
             writer.writerow(data)
-
-    print(f'📩 Data saved to {csv_filename}')
 
 def main():
     # Load configurations from JSON file
@@ -175,11 +183,8 @@ def main():
             last_place = place_data['name']
             data_list.append(place_data)
             count = count +  1 
-            print(f"✅ Nro {count} Stored {place_data['name']}")
+            print(f"📩 Nro {count} Stored {place_data['name']}")
             last_url = driver.current_url
-
-    # Save data to CSV
-    save_to_csv(data_list, config['csv_filename'])
 
     # Close the browser after processing
     driver.quit()
