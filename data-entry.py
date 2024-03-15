@@ -45,7 +45,7 @@ def search_for_category(driver, category, zone):
 def scroll_into_view(driver, element):
     driver.execute_script("arguments[0].scrollIntoView(true);", element)
 
-def scroll_results(driver, current_amount_results, waittime=10):
+def scroll_results(driver, current_amount_results, waittime=100):
     try:
         wait_for_elements(driver, By.CSS_SELECTOR, '.qjESne.veYFef')
         elemento = driver.find_element(By.CSS_SELECTOR, '.qjESne.veYFef')
@@ -59,7 +59,7 @@ def scroll_results(driver, current_amount_results, waittime=10):
                 wait_for_elements(driver, By.CSS_SELECTOR, '.hfpxzc')
                 if int(current_amount_results) == int(len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))):
                     times_left += 1
-                    time.sleep(0.5)
+                    time.sleep(0.1)
                 else:
                     return True
             except:
@@ -157,37 +157,39 @@ def main():
     last_place = ""
     last_url = ""
     count = 0
-    for category, location in zip(config['categories'], config['target_locations']):
-        search_for_category(driver, category, location)
-        wait_for_elements(driver, By.CLASS_NAME, 'hfpxzc')
 
+    for category in config['categories']:
+        for location in config['target_locations']:
+            search_for_category(driver, category, location)
+            wait_for_elements(driver, By.CLASS_NAME, 'hfpxzc')
 
-        discovered_places = 0
-        while True:
-            try:
-                available_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
-                if available_places == discovered_places:
-                    if scroll_results(driver, available_places) == False:
-                        break
-                else:
-                    discovered_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
+            discovered_places = 0
+            while True:
+                try:
+                    available_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
+                    if available_places == discovered_places:
+                        if scroll_results(driver, available_places) == False:
+                            break
+                    else:
+                        discovered_places = len(driver.find_elements(By.CLASS_NAME, 'hfpxzc'))
 
-            except TimeoutException: # Make this more time efficient
-                print("❓ Not found")
-                break
+                except TimeoutException: # Make this more time efficient
+                    print("❓ Not found")
+                    break
 
-        places = driver.find_elements(By.CLASS_NAME, 'hfpxzc')
+            places = driver.find_elements(By.CLASS_NAME, 'hfpxzc')
 
-        for place in places:
-            place_data = get_place_data(driver, place, last_url, last_place, category, location)
-            last_place = place_data['name']
-            data_list.append(place_data)
-            count = count +  1 
-            print(f"📩 {count} | Stored {place_data['name']}")
-            last_url = driver.current_url
+            for place in places:
+                place_data = get_place_data(driver, place, last_url, last_place, category, location)
+                last_place = place_data['name']
+                data_list.append(place_data)
+                count = count +  1 
+                print(f"📩 {count} | Stored {place_data['name']}")
+                last_url = driver.current_url
 
     # Close the browser after processing
     driver.quit()
+
 
 if __name__ == "__main__":
     main()
