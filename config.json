@@ -1,45 +1,11 @@
 {
   "categories": [
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
-    "Empresa de fumigación y control de plagas",
     "Empresa de fumigación y control de plagas"
   ],
   "target_locations": [
-    "Catamarca",
-    "Chaco",
-    "Chubut",
-    "Córdoba",
-    "Corrientes",
-    "Entre Ríos",
-    "Formosa",
-    "Jujuy",
-    "La Pampa",
-    "La Rioja",
-    "Misiones",
-    "Neuquén",
-    "Río Negro",
-    "Salta",
-    "Santa Cruz",
-    "Santa Fe",
-    "Santiago del Estero",
-    "Tierra del Fuego",
-    "Tucumán"
+    "Córdoba capital",
+    "Córdoba Río Cuarto",
+    "Córdoba Colón"
   ],
   "csv_filename": "places_data.csv"
 }
