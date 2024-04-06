@@ -16,7 +16,7 @@ Information scraped:
 1. Clone this repository to your local machine:
 
    ```bash
-   git clone https://github.com/LorennMarque/Plug-Go-Google-Maps-Scrapper
+   git clone https://github.com/LorennMarque/Google-Maps-Scraper-Fast.git
    ```
 
 2. Install the dependencies using the requirements.txt file:
