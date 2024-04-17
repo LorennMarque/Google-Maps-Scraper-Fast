@@ -1,13 +1,14 @@
 {
   "categories": [
-    "Empresa de fumigación y control de plagas",
-    "Empresa de instalacion de paneles solares",
-    "Empresa inmobiliaria"
+    "Empresa de sublimacion y estampado"
   ],
   "target_locations": [
-    "Córdoba capital",
-    "Córdoba Río Cuarto",
-    "Córdoba Colón"
+    "Provincia Cordoba centro",
+    "Provincia Cordoba San Vicente",
+    "Provincia Cordoba residencia america",
+    "Provincia Cordoba Alto Alberdi",
+    "Provincia Cordoba Villa Cabrera",
+    "Provincia Cordoba San martin"
   ],
   "csv_filename": "places_data.csv"
 }

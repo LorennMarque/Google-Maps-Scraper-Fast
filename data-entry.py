@@ -21,7 +21,7 @@ def open_google_maps():
     # Open webdriver
     chrome_options = Options()
     chrome_options.add_argument("--headless=new") # for Chrome >= 109
-    chrome_options.add_argument("--window-size=1920,1080")
+    # chrome_options.add_argument("--window-size=1920,1080")
     driver = webdriver.Chrome(options=chrome_options)
     driver.get('https://www.google.com/maps')
     print("⭐ Webdriver started")
@@ -107,10 +107,12 @@ def get_place_data(driver, place, previous_url, previous_name, category, locatio
         place_review_amount = ""
 
     try:
-        place_phone_number = int(re.sub(r"[-\" ]", "",driver.find_element(By.CSS_SELECTOR, '[data-item-id^="phone"]').text))
+        place_phone_number = driver.find_element(By.CSS_SELECTOR, '[data-item-id^="phone"]').text
+        # phone:tel:03548631622
 
     except:
         # Handle the case when either score or amount element is not found
+        print("phone messed up")
         place_phone_number = ""
 
     try:
@@ -181,15 +183,19 @@ def main():
 
             for place in places:
                 place_data = get_place_data(driver, place, last_url, last_place, category, location)
+                while last_url == driver.current_url:
+                    print("Esperando..")
+                    last_url = driver.current_url
                 last_place = place_data['name']
                 data_list.append(place_data)
                 count = count +  1 
-                print(f"📩 {count} | Stored {place_data['name']}")
                 last_url = driver.current_url
+                print(f"📩 {count} | Stored {place_data['name']}")
 
     # Close the browser after processing
     driver.quit()
 
 
 if __name__ == "__main__":
+    print("Iniciando búsqueda")
     main()
