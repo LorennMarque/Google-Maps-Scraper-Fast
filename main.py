@@ -10,7 +10,8 @@ import csv
 import re
 
 # Constants
-INVALID_WEBSITE_NAMES = {"negocio.site", "facebook.com", "instagram.com"} # Put this into monkey-friendly json file. Somehow.
+# INVALID_WEBSITE_NAMES = {"negocio.site", "facebook.com", "instagram.com"} 
+INVALID_WEBSITE_NAMES = {} 
 
 def load_config(config_file='config.json'):
     with open(config_file, 'r', encoding="utf-8") as file:
@@ -20,8 +21,8 @@ def load_config(config_file='config.json'):
 def open_google_maps():
     # Open webdriver
     chrome_options = Options()
-    chrome_options.add_argument("--headless=new") # for Chrome >= 109
-    # chrome_options.add_argument("--window-size=1920,1080")
+    # chrome_options.add_argument("--headless=new") # for Chrome >= 109
+    chrome_options.add_argument("--window-size=1920,1080")
     driver = webdriver.Chrome(options=chrome_options)
     driver.get('https://www.google.com/maps')
     print("⭐ Webdriver started")
@@ -108,7 +109,6 @@ def get_place_data(driver, place, previous_url, previous_name, category, locatio
 
     try:
         place_phone_number = driver.find_element(By.CSS_SELECTOR, '[data-item-id^="phone"]').text
-        # phone:tel:03548631622
 
     except:
         # Handle the case when either score or amount element is not found

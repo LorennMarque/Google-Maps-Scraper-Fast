@@ -1,42 +1,11 @@
 {
   "categories": [
-    "Limpieza del hogar",
-    "Reparación de electrodomésticos",
-    "Consultoría financiera",
-    "Entrenamiento personal",
-    "Diseño gráfico",
-    "Marketing digital",
-    "Servicios de traducción",
-    "Consultoría legal",
-    "Fotografía profesional",
-    "Servicios de catering",
-    "Diseño de interiores",
-    "Cuidado de mascotas",
-    "Servicios de contabilidad",
-    "Entrenamiento vocal",
-    "Servicios de jardinería",
-    "Servicios de reparación de automóviles",
-    "Servicios de fontanería",
-    "Servicios de diseño de moda",
-    "Servicios de eventos y planificación de bodas"
+    "Empresas de fumigacion y control de plagas"
 ],
 
   "target_locations": [
-    "Provincia Cordoba centro",
-    "Provincia Cordoba San Vicente",
-    "Provincia Cordoba residencia america",
-    "Provincia Cordoba Alto Alberdi",
-    "Provincia Cordoba Villa Cabrera",
-    "Provincia Cordoba San martin",
-    "Provincia Santa Fe Rosario",
-    "Provincia Buenos Aires, mar del plata",
-    "San Miguel de Tucumán Tucumán",
-    "Santa Fe Santa Fe",
-    "Corrientes Corrientes",
-    "Bahía Blanca Buenos Aires",
-    "Merlo nota 1 Buenos Aires",
-    "Quilmes Buenos Aires",
-    "Gregorio de Laferrere Buenos Aires"
+    "Buenos Aires Pilar"
+
   ],
-  "csv_filename": "places_data.csv"
+  "csv_filename": "fumigacion.csv"
 }
