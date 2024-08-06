@@ -21,8 +21,8 @@ def load_config(config_file='config.json'):
 def open_google_maps():
     # Open webdriver
     chrome_options = Options()
-    # chrome_options.add_argument("--headless=new") # for Chrome >= 109
-    chrome_options.add_argument("--window-size=1920,1080")
+    chrome_options.add_argument("--headless=new") # for Chrome >= 109
+    # chrome_options.add_argument("--window-size=1920,1080")
     driver = webdriver.Chrome(options=chrome_options)
     driver.get('https://www.google.com/maps')
     print("⭐ Webdriver started")
