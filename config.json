@@ -1,18 +1,5 @@
 {
-  "categories": [
-    "Empresas de fumigación y control de plagas",
-    "Empresas de jardinería y mantenimiento de jardines",
-    "Servicios de limpieza residencial y comercial"
-  ],
-  "target_locations": [
-    "Buenos Aires, Argentina",
-    "Palermo",
-    "Recoleta",
-    "Belgrano",
-    "Nuñez",
-    "Villa Urquiza",
-    "Caballito",
-    "Puerto Madero",
-    "Colegiales"
+  "queries": [
+    "Cafeterias en Argentina, Buenos aires"
   ]
 }
