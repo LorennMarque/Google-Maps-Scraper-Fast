@@ -272,11 +272,10 @@ def click_all_elements(driver):
 def main():
     # Load configurations from JSON file
     config = load_config()
-    data_list = []
 
     # Main logic
-    driver = open_google_maps()
-    # driver = open_google_maps(show_window = True) # UNCOMMENT THIS LINE TO VISUALIZE BROWSER
+    # driver = open_google_maps()
+    driver = open_google_maps(show_window = True)
 
     for query in config['queries']:
         search_query(driver, query)
