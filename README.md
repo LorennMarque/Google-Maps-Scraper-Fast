@@ -15,15 +15,14 @@ Before running the script, ensure the following are installed:
 * [Python 3.7+](https://www.python.org/)
 * Google Chrome
 * ChromeDriver (compatible with your version of Chrome)
-* Python dependencies listed in `requirements.txt`
+* Install Selenium package
 
 ## Installation
 ```bash
 # Clone or download the repository
 
 # Install required Python libraries
-echo "selenium" > requirements.txt
-pip install -r requirements.txt
+pip install selenium
 
 # Download ChromeDriver
 # Ensure ChromeDriver matches your Chrome version
